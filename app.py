@@ -32,7 +32,7 @@ def connect():
     else:
         clients[request.remote_addr] = {
             'timestamp': time.time(),
-            'stream': '',
+            'stream': 'http://10.0.0.5:3251/stream',
             'volume': 50,
             'owner': -1
         }
