@@ -32,7 +32,7 @@ def connect():
     else:
         clients[request.remote_addr] = {
             'timestamp': time.time(),
-            'stream': 'http://10.0.0.5:3251/stream',
+            'stream': '',
             'volume': 50,
             'owner': -1
         }
@@ -55,10 +55,17 @@ def connect():
 def get_clients():
     return Response(json.dumps(clients),  mimetype='application/json')
 
-@app.route('/owner', methods=['POST'])
-def set_owner():
-    req = json.load(request.data)
-    clients[request.remote_addr] = req['owner']
+@app.route('/changeOwner', methods=['POST'])
+def change_owner():
+    global clients
+    req = request.form
+    remote = req['remote']
+    clients[remote]['owner'] = int(req['owner'])
+    clients[remote]['stream'] = 'http://10.0.0.5:3251/stream'
+    if clients[remote]['owner'] == -1:
+        clients[remote]['stream'] = ''
+    print clients
+    return ''
 
 @app.route('/')
 def index():
@@ -79,9 +86,10 @@ def disconnect_idles():
     while len(clients) > 0:
         clients_to_pop = []
         for client in clients:
-            if (time.time() - clients[client]['timestamp'] > 10):
+            if (time.time() - clients[client]['timestamp'] > 30):
                 clients_to_pop.append(client)
         for client in clients_to_pop:
+            print 'AFTER'
             clients.pop(client)
         time.sleep(10)
     idle_checking = False
