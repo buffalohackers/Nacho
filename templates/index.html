@@ -4,8 +4,8 @@
   <title>Speaker Sync</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery-ui.js') }} "></script>
   <script src="{{ url_for('static', filename='js/index.js') }}" type="text/javascript"></script>
 </head>
 
@@ -24,29 +24,24 @@
     </div>
 
     <div class="device-list-wrapper">
-      <ul class="pull-left device-list droptrue" id="active-speakers">
-      <p>Active Speakers</p>
-      {% for speaker in listActive %}
-        <li>{{ speaker.name }}</li>
-      {% endfor %}
-      </ul>
+      <div class="pull-left device-list">
+        <ul id="active-speakers" class="droptrue">
+          <p>Active Speakers</p>
+          {% for speaker in listActive %}
+            <li>{{ speaker.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
 
-      <ul class="pull-right device-list droptrue" id="available-speakers">
-        <p>Available Speakers</p>
-       {% for speaker in listAvailable %}
-        <li>{{ speaker.name }} </li>
-        {% endfor %}
-      </ul>
+      <div class="pull-right device-list ">
+        <ul id="available-speakers" class="droptrue">
+          <p>Available Speakers</p>
+         {% for speaker in listAvailable %}
+          <li>{{ speaker.name }} </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-
-    <div class="inactive-devices">
-      <p>Speakers Currently In-active</p>
-      <p class="list-inactive">
-      {% for speaker in listInUse %} 
-      {{ speaker.name }},  
-      {% endfor %}
-    </p>
-
 </div>
   </div>
 
