@@ -17,7 +17,6 @@ ip_root = 'http://10.0.0.'
 port = '1337'
 listActive = [{"name": "Hello"}]
 listAvailable = [{"name": "YOLO"}, {"name":"SHIT"}]
-listInUse = [{"name": "Inactive"}, {"name": "Joe Peacock"}]
 lanIp = ""
 
 @app.before_request
@@ -63,7 +62,15 @@ def set_owner():
 
 @app.route('/')
 def index():
-    return flask.render_template('index.html', listActive=listActive, listAvailable=listAvailable, device={"name": "Peacock", "ip": "10.0.0.4"}, listInUse=listInUse)
+    listActive = []
+    listAvailable = []
+    for client in clients:
+        if clients[client]['owner'] == -1:
+            listAvailable.append({'name': client})
+        else:
+            listActive.append({'name': client})
+
+    return flask.render_template('index.html', listActive=listActive, listAvailable=listAvailable, device={"name": request.remote_addr, "ip": request.remote_addr})
 
 def set_lan_ip():
     lanIp = commands.getoutput("/sbin/ifconfig").split("\n")[10].split(" ")[1]
