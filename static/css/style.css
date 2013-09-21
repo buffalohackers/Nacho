@@ -95,3 +95,8 @@ ul {
 .list-title {
 	margin-left: 30px;
 }
+
+#active-speakers,
+#available-speakers {
+	min-height: 100px;
+}
