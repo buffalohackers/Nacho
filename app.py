@@ -1,5 +1,10 @@
 from flask import Flask, request, Response
 import json, time, threading, urllib2
+import flask
+import json
+import socket
+import os
+import commands
 
 app = Flask(__name__)
 app.debug = True
@@ -10,6 +15,14 @@ idle_checking = False
 master_scanning = False
 ip_root = 'http://10.0.0.'
 port = '1337'
+listActive = [{"name": "Hello"}]
+listAvailable = [{"name": "YOLO"}, {"name":"SHIT"}]
+listInUse = [{"name": "Inactive"}, {"name": "Joe Peacock"}]
+lanIp = ""
+
+@app.before_request
+def before_request():
+    set_lan_ip()
 
 @app.route('/state')
 def connect():
@@ -49,8 +62,11 @@ def set_owner():
     clients[request.remote_addr] = req['owner']
 
 @app.route('/')
-def helo():
-    return "hello world"
+def index():
+    return flask.render_template('index.html', listActive=listActive, listAvailable=listAvailable, device={"name": "Peacock", "ip": "10.0.0.4"}, listInUse=listInUse)
+
+def set_lan_ip():
+    lanIp = commands.getoutput("/sbin/ifconfig").split("\n")[10].split(" ")[1]
 
 def disconnect_idles():
     while len(clients) > 0:
