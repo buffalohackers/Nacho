@@ -15,7 +15,7 @@
     <h1 class="logo"> SpeakerSync </h1>
 
     <div class="current-device">
-        Your Device: {{ device.name }} ~ {{ device.ip }}
+        Your Device: {{ device.name }} ~ <span id="owner">{{ device.ip }}</span>
     </div>
 
     <div class="navigation">
@@ -26,18 +26,18 @@
     <div class="device-list-wrapper">
       <div class="pull-left device-list">
           <p class="list-title">Active Speakers</p>
-        <ul id="active-speakers" class="droptrue">
+        <ul id="active-speakers" class="connected">
           {% for speaker in listActive %}
-            <li>{{ speaker.name }}</li>
+            <li id="{{ speaker.name }}">{{ speaker.name }}</li>
           {% endfor %}
         </ul>
       </div>
 
       <div class="pull-right device-list ">
           <p class="list-title">Available Speakers</p>
-        <ul id="available-speakers" class="droptrue">
+        <ul id="available-speakers" class="connected">
          {% for speaker in listAvailable %}
-          <li>{{ speaker.name }} </li>
+          <li id="{{ speaker.name }}">{{ speaker.name }} </li>
           {% endfor %}
         </ul>
       </div>
