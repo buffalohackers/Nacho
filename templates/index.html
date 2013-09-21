@@ -25,8 +25,8 @@
 
     <div class="device-list-wrapper">
       <div class="pull-left device-list">
+          <p class="list-title">Active Speakers</p>
         <ul id="active-speakers" class="droptrue">
-          <p>Active Speakers</p>
           {% for speaker in listActive %}
             <li>{{ speaker.name }}</li>
           {% endfor %}
@@ -34,8 +34,8 @@
       </div>
 
       <div class="pull-right device-list ">
+          <p class="list-title">Available Speakers</p>
         <ul id="available-speakers" class="droptrue">
-          <p>Available Speakers</p>
          {% for speaker in listAvailable %}
           <li>{{ speaker.name }} </li>
           {% endfor %}
@@ -43,7 +43,6 @@
       </div>
     </div>
 </div>
-  </div>
 
 </body>
 </html>

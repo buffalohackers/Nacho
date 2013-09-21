@@ -48,7 +48,7 @@ ul {
 	text-align: center;
 	list-style-type: none;
 	margin-top: 25px;
-	padding: 0 50px;
+	padding: 0 25px;
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;
@@ -90,4 +90,8 @@ ul {
     display: block;
     content: " ";
     clear: both;
+}
+
+.list-title {
+	margin-left: 30px;
 }
