@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Speaker Sync</title>
+  
+</head>
+
+<body>
+
+  <h1>FUCK YOU</h1>
+  <ul>
+  {% for speaker in listActive %}
+    <li>{{ speaker.name }}</li>
+  {% endfor %}
+  </ul>
+
+  <ul>
+   {% for speaker in listAvailable %}
+    <li>{{ speaker.name }} </li>
+    {% endfor %}
+  </ul>
+
+</body>
+</html>
