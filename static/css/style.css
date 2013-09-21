@@ -47,7 +47,7 @@ ul {
 	padding: 0;
 	text-align: center;
 	list-style-type: none;
-	margin-top: 25px;
+	margin-top: 50px;
 	padding: 0 25px;
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -99,4 +99,16 @@ ul {
 #active-speakers,
 #available-speakers {
 	min-height: 100px;
+}
+
+.navigation {
+	text-align: center;
+	margin-top:-60px;
+}
+
+.navigation p {
+	width: 20%;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;	
 }
