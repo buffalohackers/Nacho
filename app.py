@@ -1,10 +1,9 @@
-from flask import Flask, request
+from flask import Flask, request, Response
 import json, time, threading, urllib2
 
 app = Flask(__name__)
 app.debug = True
 
-print 'init'
 masters = {}
 clients = {}
 idle_checking = False
@@ -15,13 +14,15 @@ port = '1337'
 @app.route('/state')
 def connect():
     global clients, idle_checking, master_scanning
+
     if request.remote_addr in clients:
         clients[request.remote_addr]['timestamp'] = time.time()
     else:
         clients[request.remote_addr] = {
             'timestamp': time.time(),
             'stream': '',
-            'volume': 50
+            'volume': 50,
+            'owner': -1
         }
     
     if not idle_checking:
@@ -36,11 +37,16 @@ def connect():
 
         master_scanning = True
 
-    return json.dumps(clients[request.remote_addr])
+    return Response(json.dumps(clients[request.remote_addr]),  mimetype='application/json')
 
 @app.route('/clients')
 def get_clients():
-    return json.dumps(clients)
+    return Response(json.dumps(clients),  mimetype='application/json')
+
+@app.route('/owner', methods=['POST'])
+def set_owner():
+    req = json.load(request.data)
+    clients[request.remote_addr] = req['owner']
 
 @app.route('/')
 def helo():
@@ -67,9 +73,6 @@ def master_scan():
             except:
                 pass
         masters = new_masters
-        print "Masters:"
-        for master in masters:
-            print master
         time.sleep(10)
 
 if __name__ == '__main__':
