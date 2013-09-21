@@ -2,16 +2,17 @@ from flask import Flask
 import json
 
 app = Flask(__name__)
+app.debug = True
 
 clients = []
 
 @app.route('/connect')
 def connect():
-    return True
+    return "hello World"
 
 @app.route('/')
-def app():
-    return False
+def helo():
+    return "hello world"
 
 if __name__ == '__main__':
-    app.run(hostname="127.0.0.1", port=80085)
+    app.run(host="127.0.0.1", port=1337)
