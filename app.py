@@ -129,7 +129,7 @@ def disconnect_idles():
             if (time.time() - clients[client]['timestamp'] > 30):
                 clients_to_pop.append(client)
         for client in clients_to_pop:
-            print 'AFTER'
+            print client + ' HAS DISCONNECTED'
             clients.pop(client)
         time.sleep(10)
     idle_checking = False
@@ -137,25 +137,24 @@ def disconnect_idles():
 def master_scan():
     global clients
     while True:
-        masters = []
         print 'STARTING SCAN'
+
         for i in range(10):
-            print 'SCAN: ' + str(i)
-            try:
-                content = urllib2.urlopen("http://" + ip_root + str(i) + ":" + str(port) + "/state").read()
-                masters.append(i)
-            except:
-                pass
-        print 'ENDING SCAN'
-        i = 0
-        for client in clients:
-            if ip_root + str(masters[i]) == client:
-                clients[client]['master'] = True
-                i += 1
-            else:
-                clients[client]['master'] = False
+            thread = threading.Thread(target=ping_state, args=(i,))
+            thread.start()
 
         time.sleep(10)
+        print 'ENDING SCAN'
+        
+def ping_state(i):
+    global ip_root
+    try:
+        content = urllib2.urlopen("http://" + ip_root + str(i) + ":" + str(port) + "/state").read()
+        clients[ip_root + str(i)]['master'] = True
+    except:
+        if ip_root + str(i) in clients:
+            clients[ip_root + str(i)]['master'] = False
+        pass
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=1337)
