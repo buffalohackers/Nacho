@@ -35,10 +35,22 @@ $(document).ready(function(){
       min: 1,
       max: 100,
       stop: function(event, ui) {
-      	name = ui.handle.parentNode.parentElement.id);
+      	name = ui.handle.parentNode.parentElement.id;
         value = ui.value;
         updateVolume(name, value);
       }
+    });
+
+    $(".mute").click(function(){
+    	if ($(this).hasClass("muted")) {
+    		console.log($("#" + this.parentNode.id + " .volume-bar"));
+    		$("#" + this.parentNode.id + " .volume-bar").slider( "value", 50 );		
+    		updateVolume(this.parentNode.id, 50);
+    	} else {
+			$(this).addClass("muted");
+			$("#" + this.parentNode.id + " .volume-bar").slider( "value", 0 );		
+    		updateVolume(this.parentNode.id, 0);
+    	}
     });
 });
 
@@ -48,6 +60,6 @@ function postList(name, owner) {
 }
 
 function updateVolume(name, volume) {
-	console.log(name, owner);
+	console.log(name, volume);
 	$.post("http://localhost:1337/updateVolume", {"name": name, "volume": volume});
 }

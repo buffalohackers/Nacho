@@ -106,13 +106,14 @@ ul {
 	margin-top:-60px;
 }
 
-.volume-bar {
-	height: 200px;
-}
-
 .navigation p {
 	width: 20%;
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;	
+}
+
+.volume-bar {
+	height:4px;
+	margin-top: 30px;
 }
