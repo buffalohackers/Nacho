@@ -30,15 +30,7 @@ $(document).ready(function(){
 });
 
 function postList(name, owner) {
- 	$.ajax({
- 		url: "http://localhost:1337/changeOwner",
- 		dataType: "json",
- 		type: "POST",
- 		data: {
- 			"name": name,
- 			"owner": owner 
- 		}
- 	}).done(function(data){
+ 	$.post("http://localhost:1337/changeOwner",{"name": name,"owner": owner}).done(function(data) {
  		console.log(data);
  	});
  };
