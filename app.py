@@ -42,6 +42,7 @@ def connect():
         clients[request.remote_addr]['timestamp'] = time.time()
     else:
         clients[request.remote_addr] = {
+            'ip': request.remote_addr,
             'timestamp': time.time(),
             'stream': '',
             'volume': 50,
@@ -93,6 +94,34 @@ def index():
 
     return flask.render_template('index.html', listActive=listActive, listAvailable=listAvailable, device={"name": lanIp, "ip": lanIp})
 
+@app.route('/updateVolume', methods=['POST'])
+def update_volume():
+    global clients
+    req = request.form
+
+    remote = req['name']
+    clients[remote]['volume'] = req['volume']
+
+    return ''
+
+@app.route('/getMasters')
+def get_masters():
+    masters = []
+    for client in clients:
+        if clients[client]['master']:
+            masters.append(clients[client])
+
+    return Response(json.dumps(masters),  mimetype='application/json')
+
+@app.route('/getSpeakers')
+def get_speakers():
+    speakers = []
+    for client in clients:
+        if not clients[client]['master']:
+            speakers.append(clients[client])
+
+    return Response(json.dumps(speakers),  mimetype='application/json')
+
 def disconnect_idles():
     while len(clients) > 0:
         clients_to_pop = []
@@ -109,14 +138,12 @@ def master_scan():
     global clients
     while True:
         masters = []
-        print 'starting'
         for i in range(10):
             try:
                 content = urllib2.urlopen("http://" + ip_root + str(i) + ":" + str(port) + "/state").read()
                 masters.append(i)
             except:
                 pass
-        print 'ending'
         i = 0
         for client in clients:
             if ip_root + str(masters[i]) == client:
@@ -124,7 +151,6 @@ def master_scan():
                 i += 1
             else:
                 clients[client]['master'] = False
-        print clients
 
         time.sleep(10)
 
