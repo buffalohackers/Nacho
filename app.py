@@ -9,7 +9,6 @@ import commands
 app = Flask(__name__)
 app.debug = True
 
-masters = {}
 clients = {}
 idle_checking = False
 master_scanning = False
@@ -85,10 +84,11 @@ def index():
     listActive = []
     listAvailable = []
     for client in clients:
-        if clients[client]['owner'] == -1:
-            listAvailable.append({'name': client})
-        else:
-            listActive.append({'name': client})
+        if not clients[client]['master']:
+            if clients[client]['owner'] == -1:
+                listAvailable.append({'name': client})
+            else:
+                listActive.append({'name': client})
 
     return flask.render_template('index.html', listActive=listActive, listAvailable=listAvailable, device={"name": lanIp, "ip": lanIp})
 
@@ -105,6 +105,7 @@ def disconnect_idles():
     idle_checking = False
 
 def master_scan():
+    global clients
     while True:
         new_masters = []
         for i in range(10):
@@ -113,7 +114,14 @@ def master_scan():
                 new_masters.append(i)
             except:
                 pass
-        masters = new_masters
+        i = 0
+        for client in clients:
+            if new_masters[i] == client:
+                clients[client]['master'] = True
+                i += 1
+            else:
+                clients[client]['master'] = False
+
         time.sleep(10)
 
 if __name__ == '__main__':
