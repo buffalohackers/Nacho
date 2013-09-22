@@ -1,5 +1,5 @@
 from flask import Flask, request, Response
-import json, time, threading, urllib2
+import json, time, threading, urllib2, re
 import flask
 import json
 import socket
@@ -15,13 +15,18 @@ idle_checking = False
 master_scanning = False
 ip_root = 'http://10.0.0.'
 port = '1337'
-listActive = [{"name": "Hello"}]
-listAvailable = [{"name": "YOLO"}, {"name":"SHIT"}]
-lanIp = ""
 
-@app.before_request
-def before_request():
-    set_lan_ip()
+found_wlan = False
+lanIp = ''
+for line in commands.getoutput("ifconfig").split("\n"):
+    if found_wlan:
+        matches = re.search(r'inet addr:(\S+)', line)
+        if matches:
+            lanIp = matches.group(1)
+    elif re.match(r'wlan', line):
+        found_wlan = True
+
+print "testtt" + lanIp
 
 @app.route('/state')
 def connect():
@@ -59,7 +64,8 @@ def get_clients():
 def change_owner():
     global clients
     req = request.form
-    remote = req['remote']
+
+    remote = req['name']
     clients[remote]['owner'] = int(req['owner'])
     clients[remote]['stream'] = 'http://10.0.0.5:3251/stream'
     if clients[remote]['owner'] == -1:
@@ -77,10 +83,7 @@ def index():
         else:
             listActive.append({'name': client})
 
-    return flask.render_template('index.html', listActive=listActive, listAvailable=listAvailable, device={"name": request.remote_addr, "ip": request.remote_addr})
-
-def set_lan_ip():
-    lanIp = commands.getoutput("/sbin/ifconfig").split("\n")[10].split(" ")[1]
+    return flask.render_template('index.html', listActive=listActive, listAvailable=listAvailable, device={"name": lanIp, "ip": lanIp})
 
 def disconnect_idles():
     while len(clients) > 0:
