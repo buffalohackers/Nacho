@@ -19,18 +19,35 @@ $(document).ready(function(){
       connectWith: ".connected",
       stop: function(event, ui) {
       	original = $(event.target).attr("id");
-    	name = event.toElement.innerHTML;
+      	name = event.toElement.id;
     	if (original == "available-speakers") {
     		postList(name, owner);
     	} else {
+    		console.log(owner);
     		postList(name, -1);
     	}
       }
     }).disableSelection();
+
+    $( ".volume-bar").slider({
+      range: "min",
+      value: 50,
+      min: 1,
+      max: 100,
+      stop: function(event, ui) {
+      	name = ui.handle.parentNode.parentElement.id);
+        value = ui.value;
+        updateVolume(name, value);
+      }
+    });
 });
 
 function postList(name, owner) {
- 	$.post("http://localhost:1337/changeOwner",{"name": name,"owner": owner}).done(function(data) {
- 		console.log(data);
- 	});
- };
+	console.log(name, owner);
+ 	$.post("http://localhost:1337/changeOwner",{"name": name,"owner": owner});
+}
+
+function updateVolume(name, volume) {
+	console.log(name, owner);
+	$.post("http://localhost:1337/updateVolume", {"name": name, "volume": volume});
+}

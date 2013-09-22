@@ -7,6 +7,7 @@
   <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
   <script src="{{ url_for('static', filename='js/jquery-ui.js') }} "></script>
   <script src="{{ url_for('static', filename='js/index.js') }}" type="text/javascript"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 </head>
 
 <body>
@@ -19,8 +20,8 @@
     </div>
 
     <div class="navigation">
-      <p class="pull-left">Speaker Management</p>
-      <p class="pull-right">Find Streams</p>
+      <p class="pull-left"><a href="/">Speaker Management</a></p>
+      <p class="pull-right"><a href="/listStreams">Find Streams</a></p>
     </div>
 
     <div class="device-list-wrapper">
@@ -28,7 +29,14 @@
           <p class="list-title">Active Speakers</p>
         <ul id="active-speakers" class="connected">
           {% for speaker in listActive %}
-            <li id="{{ speaker.name }}">{{ speaker.name }}</li>
+            <li id="{{ speaker.name }}">
+              <div class="pull-left device-name">{{ speaker.name }}</div>
+              <div class="pull-right mute">Mute</div>
+              <br>
+              <div class="volume-bar">
+
+              </div>
+            </li>
           {% endfor %}
         </ul>
       </div>
@@ -37,7 +45,14 @@
           <p class="list-title">Available Speakers</p>
         <ul id="available-speakers" class="connected">
          {% for speaker in listAvailable %}
-          <li id="{{ speaker.name }}">{{ speaker.name }}</li>
+          <li id="{{ speaker.name }}">
+            <div class="pull-left device-name">{{ speaker.name }}</div>
+              <div class="pull-right mute">Mute</div>
+              <br>
+              <div class="volume-bar">
+                
+              </div>
+            </li>
           {% endfor %}
         </ul>
       </div>
