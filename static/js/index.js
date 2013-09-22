@@ -122,8 +122,3 @@ function reformatId(that){
 		$(that).attr("name", ip);
 	}
 }
-
-function handleSwap(event) {
-	console.log(event);
-}
-
