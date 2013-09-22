@@ -45,6 +45,7 @@ def connect():
             'timestamp': time.time(),
             'stream': '',
             'volume': 50,
+            'master': False,
             'owner': -1
         }
     
