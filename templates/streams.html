@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Speaker Sync</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'> -->
+  <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery-ui.js') }} "></script>
+  <script src="{{ url_for('static', filename='js/index.js') }}" type="text/javascript"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}" />
+</head>
+
+<body>
+
+  <div class="container">
+    <h1 class="logo"> SpeakerSync </h1>
+
+    <div class="navigation whoops">
+      <p class="pull-left"><a href="/">Speaker Management</a></p>
+      <p class="pull-right"><a href="/listStreams">Find Streams</a></p>
+    </div>
+
+
+    <h3 class="stream-title">Live Streams</h3>
+    <ul class="list-streams">
+
+      {% for master in masters %}
+      <div class="stream">
+        <p class="pull-left" style="clear:left;">{{ master.ip }}</p>
+        <audio controls class="pull-left" style="margin-top:10px; margin-left:30px; width:50%; clear:right;">
+          <source src="http://{{ master.ip }}:3251/stream" type="audio/mp3">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+      {% endfor %}
+    </ul>
+
+</div>
+
+</body>
+</html>

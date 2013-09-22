@@ -91,7 +91,6 @@ def index():
                 else:
                     listActive.append({'name': client})
     print "almost"
-
     return flask.render_template('index.html', listActive=listActive, listAvailable=listAvailable, device={"name": lanIp, "ip": lanIp})
 
 @app.route('/updateVolume', methods=['POST'])
@@ -115,6 +114,17 @@ def get_masters():
                 masters.append(clients[client])
 
     return Response(json.dumps(masters),  mimetype='application/json')
+
+@app.route('/listStreams')
+def list_streams():
+	global lock
+	masters = []
+	with lock:
+		for client in clients:
+			if clients[client]['master']:
+				masters.append(clients[client])
+
+	return flask.render_template("streams.html", masters=masters)
 
 @app.route('/getSpeakers')
 def get_speakers():
@@ -167,10 +177,11 @@ def master_pings():
         locked = True
         for client in clients:
             if clients[client]['master']:
+            	args = client.split(':')[-1]
                 lock.release()
                 locked = False
                 print 'test2'
-                thread = threading.Thread(target=ping_state, args=(client.split(':')[-1],))
+                thread = threading.Thread(target=ping_state, args=(args,))
                 thread.start()
                 thread.join()
         if locked:
