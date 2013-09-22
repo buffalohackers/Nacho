@@ -23,7 +23,7 @@ for line in commands.getoutput("ifconfig").split("\n"):
         matches = re.search(r'inet addr:(\S+)', line)
         if matches:
             lanIp = matches.group(1)
-    elif re.match(r'wlan', line):
+    elif re.match(r'wlan', line) or re.match(r'en0', line):
         found_wlan = True
 
 print "testtt" + lanIp
