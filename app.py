@@ -74,7 +74,7 @@ def change_owner():
 
     remote = req['name']
     clients[remote]['owner'] = int(req['owner'])
-    clients[remote]['stream'] = 'http://10.0.0.5:3251/stream'
+    clients[remote]['stream'] = 'http://' + lanIp + ':3251/stream'
     if clients[remote]['owner'] == -1:
         clients[remote]['stream'] = ''
     print clients
