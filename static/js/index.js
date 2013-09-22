@@ -18,13 +18,15 @@ $(document).ready(function(){
     $( "#active-speakers, #available-speakers" ).sortable({
       connectWith: ".connected",
       stop: function(event, ui) {
-      	original = $(event.target).attr("id");
+      	current = event.toElement.parentNode.id;
       	name = event.toElement.id;
-    	if (original == "available-speakers") {
-    		postList(name, owner);
-    	} else {
-    		console.log(owner);
+      	if (name == "") {
+      		name = event.toElement.textContent;
+      	}
+    	if (current == "available-speakers") {
     		postList(name, -1);
+    	} else {
+    		postList(name, 4);
     	}
       }
     }).disableSelection();
@@ -45,6 +47,7 @@ $(document).ready(function(){
     	if ($(this).hasClass("muted")) {
     		console.log($("#" + this.parentNode.id + " .volume-bar"));
     		$("#" + this.parentNode.id + " .volume-bar").slider( "value", 50 );		
+    		$(this).removeClass("muted");
     		updateVolume(this.parentNode.id, 50);
     	} else {
 			$(this).addClass("muted");

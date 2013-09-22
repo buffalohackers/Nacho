@@ -114,6 +114,18 @@ ul {
 }
 
 .volume-bar {
-	height:4px;
+	height:4px !important;
 	margin-top: 30px;
+}
+
+.volume-bar .ui-slider-range {
+	background:#666;
+}
+
+.volume-bar .ui-slider-handle {
+	width: 15px !important;
+	height: 15px !important;
+	border-radius: 30px;
+	top: -6px !important;
+	background:#333 !important; 
 }
