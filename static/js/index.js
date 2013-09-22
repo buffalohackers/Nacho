@@ -31,7 +31,7 @@ $(document).ready(function(){
 
 function postList(name, owner) {
  	$.ajax({
- 		url: "https://localhost:1337/changeOwner",
+ 		url: "http://localhost:1337/changeOwner",
  		dataType: "application/json",
  		type: "POST",
  		data: {
