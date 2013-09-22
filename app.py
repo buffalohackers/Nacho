@@ -138,12 +138,15 @@ def master_scan():
     global clients
     while True:
         masters = []
+        print 'STARTING SCAN'
         for i in range(10):
+            print 'SCAN: ' + str(i)
             try:
                 content = urllib2.urlopen("http://" + ip_root + str(i) + ":" + str(port) + "/state").read()
                 masters.append(i)
             except:
                 pass
+        print 'ENDING SCAN'
         i = 0
         for client in clients:
             if ip_root + str(masters[i]) == client:
