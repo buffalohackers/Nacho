@@ -17,14 +17,21 @@ ip_root = 'http://10.0.0.'
 port = '1337'
 
 found_wlan = False
+found_en = False
 lanIp = ''
 for line in commands.getoutput("ifconfig").split("\n"):
-    if found_wlan:
-        matches = re.search(r'inet addr:(\S+)', line)
+    if found_wlan or found_en:
+        if found_wlan:
+            matches = re.search(r'inet addr:(\S+)', line)
+        else:
+            matches = re.search(r'inet (\S+)', line)
         if matches:
             lanIp = matches.group(1)
-    elif re.match(r'wlan', line) or re.match(r'en0', line):
+    elif re.match(r'wlan', line):
         found_wlan = True
+    elif re.match(r'en0', line):
+        found_en = True
+
 
 print "testtt" + lanIp
 
