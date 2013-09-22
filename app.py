@@ -32,8 +32,6 @@ for line in commands.getoutput("ifconfig").split("\n"):
         found_en = True
 
 
-print "testtt" + lanIp
-
 @app.route('/state')
 def connect():
     global clients, idle_checking, master_scanning
@@ -52,16 +50,12 @@ def connect():
     
     if not idle_checking:
         thread = threading.Thread(target=disconnect_idles)
+        thread.daemon = True
         thread.start()
 
         idle_checking = True
 
-    if not master_scanning:
-        thread = threading.Thread(target=master_scan)
-        thread.start()
-
-        master_scanning = True
-
+    
     return Response(json.dumps(clients[request.remote_addr]),  mimetype='application/json')
 
 @app.route('/clients')
@@ -78,7 +72,6 @@ def change_owner():
     clients[remote]['stream'] = 'http://' + lanIp + ':3251/stream'
     if clients[remote]['owner'] == -1:
         clients[remote]['stream'] = ''
-    print clients
     return ''
 
 @app.route('/')
@@ -96,7 +89,7 @@ def index():
 
 @app.route('/updateVolume', methods=['POST'])
 def update_volume():
-    global clients
+    global clients, lock
     req = request.form
 
     remote = req['name']
@@ -129,7 +122,6 @@ def disconnect_idles():
             if (time.time() - clients[client]['timestamp'] > 30):
                 clients_to_pop.append(client)
         for client in clients_to_pop:
-            print client + ' HAS DISCONNECTED'
             clients.pop(client)
         time.sleep(10)
     idle_checking = False
@@ -137,24 +129,42 @@ def disconnect_idles():
 def master_scan():
     global clients
     while True:
-        print 'STARTING SCAN'
-
         for i in range(10):
-            thread = threading.Thread(target=ping_state, args=(i,))
-            thread.start()
+            print 'test'
+            #thread = threading.Thread(target=ping_state, args=(i,))
+            #thread.start()
+            ping_state(i)
 
         time.sleep(10)
-        print 'ENDING SCAN'
         
 def ping_state(i):
     global ip_root
+    print 'state' + str(i)
     try:
         content = urllib2.urlopen("http://" + ip_root + str(i) + ":" + str(port) + "/state").read()
         clients[ip_root + str(i)]['master'] = True
     except:
         if ip_root + str(i) in clients:
             clients[ip_root + str(i)]['master'] = False
-        pass
+
+def master_pings():
+    while True:
+        for client in clients:
+            if clients[client]['master']:
+                print 'test2'
+                thread = threading.Thread(target=ping_state, args=(client.split(':')[-1],))
+                thread.start()
+                thread.join()
+        time.sleep(1)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=1337)
+
+#scan_thread = threading.Thread(target=master_scan)
+#scan_thread.daemon = True
+#scan_thread.start()
+master_scan()
+
+#ping_thread = threading.Thread(target=master_pings)
+#ping_thread.daemon = True
+#ping_thread.start()
