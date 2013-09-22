@@ -12,7 +12,7 @@ app.debug = True
 clients = {}
 idle_checking = False
 master_scanning = False
-ip_root = 'http://10.0.0.'
+ip_root = '10.0.0.'
 port = '1337'
 
 found_wlan = False
@@ -108,20 +108,23 @@ def disconnect_idles():
 def master_scan():
     global clients
     while True:
-        new_masters = []
+        masters = []
+        print 'starting'
         for i in range(10):
             try:
-                content = urllib2.urlopen(ip_root + str(i) + ":" + str(port) + "/state").read()
-                new_masters.append(i)
+                content = urllib2.urlopen("http://" + ip_root + str(i) + ":" + str(port) + "/state").read()
+                masters.append(i)
             except:
                 pass
+        print 'ending'
         i = 0
         for client in clients:
-            if new_masters[i] == client:
+            if ip_root + str(masters[i]) == client:
                 clients[client]['master'] = True
                 i += 1
             else:
                 clients[client]['master'] = False
+        print clients
 
         time.sleep(10)
 
